@@ -11,5 +11,8 @@
 .signup{
     display: flex; 
     flex-direction: column;
+    width: 400px; 
+    position: relative; 
+    left: 500px;
 }
 </style>
