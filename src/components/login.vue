@@ -4,7 +4,8 @@
       <div class =  'fields'>
         Username: <input type = 'text' placeholder = 'username'>
         Password:  <input type = 'text' placeholder = 'password'>
-      </div>  
+      </div>
+      <p> Sign up for account <router-link to = '/signup'> here </router-link> </p>  
   </div>
 </template>
 
