@@ -1,14 +1,29 @@
 <template>
   <div class="hello">
     You are logged in!
+    <div>
+    {{transactions}}
+    </div>
   </div>
 </template>
 
 <script>
+import db from '../main.js';
+import firebase from 'firebase';
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  }, 
+  data() {
+    return {
+      transactions : [],
+    }
+  }, 
+  firestore(){
+    return {
+       transactions : db.collection("purchases")
+    }
   }
 }
 </script>
