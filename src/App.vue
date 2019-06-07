@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Home from './components/HomePage.vue'
 import Login from './components/login.vue';
 import Signup from './components/signup.vue';
 
@@ -12,7 +13,8 @@ export default {
   name: 'app',
   components: {
     Login,
-    Signup
+    Signup, 
+    Home
   }
 }
 </script>
