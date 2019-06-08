@@ -1,8 +1,16 @@
 <template>
   <div class="hello">
     You are logged in!
-    <div>
-    {{transactions}}
+    <div class = 'listOne'>
+      <div> 
+        Purchase:<input type = 'text' class = 'enter' placeholder = 'purchase' v-model = 'item'>
+        Price: <input type = 'text' placeholder = 'price' v-model = 'price'>
+        <input type = 'submit' value = "Enter" v-on:click = "addItem">
+      </div>  
+      <div class = 'transaction' v-for = 'transaction in transactions'>
+        <div class = 'item'> {{transaction["item"]}} </div>
+        <div class = 'price'> {{transaction["price"]}} </div>
+      </div>
     </div>
   </div>
 </template>
@@ -18,11 +26,20 @@ export default {
   data() {
     return {
       transactions : [],
+      item: '', 
+      price: ''
     }
   }, 
   firestore(){
     return {
        transactions : db.collection("purchases")
+    }
+  }, 
+  methods : {
+    addItem(){
+      db.collection('purchases').add({item: this.item, price: this.price});
+      this.item  = '';
+      this.price = '';
     }
   }
 }
@@ -44,4 +61,24 @@ li {
 a {
   color: #42b983;
 }
+
+.enter{
+  width: 200px;
+}
+
+.transaction{
+  display: flex; 
+  flex-direction: row;
+  border: 1px solid black;
+  width: 300px;
+  justify-content: space-evenly;
+}
+
+.listOne{
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+}
+
 </style>
