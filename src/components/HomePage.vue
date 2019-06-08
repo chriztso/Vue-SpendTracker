@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    You are logged in!
     <div class = 'listOne'>
       <div> 
         Purchase:<input type = 'text' class = 'enter' placeholder = 'purchase' v-model = 'item'>
@@ -13,10 +12,22 @@
         <input type = 'submit' value = "Delete" v-on:click = "deleteItem(transaction['.key'])"> 
       </div>
     </div>
+    <div class = 'spendChart'>
+      <div>
+        <p>Spending</p>
+        Month: <input type = 'text' v-model= 'month'>
+        Amount: <input type = 'text' v-model= 'amount'>
+        <input type = "submit" value = "Enter spend" v-on:click = "addMonthlySpend"> 
+      </div>
+      <div>
+        <apexchart width="500" type="bar" :options="chartOptions" :series="series"></apexchart>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import VueApexCharts from 'vue-apexcharts';
 import db from '../main.js';
 import firebase from 'firebase';
 export default {
@@ -24,11 +35,25 @@ export default {
   props: {
     msg: String
   }, 
+  components: {
+    apexchart : VueApexCharts,
+  },
   data() {
     return {
+      chartOptions: {
+        xaxis: {
+          categories: [],
+        },
+      },
+      series: [{
+        name: 'series-1',
+        data: []
+      }], 
       transactions : [],
       item: '', 
-      price: ''
+      price: '', 
+      month: '', 
+      amount: ''
     }
   }, 
   firestore(){
@@ -44,6 +69,12 @@ export default {
     },
     deleteItem(id){
       db.collection('purchases').doc(id).delete();
+    }, 
+    addMonthlySpend(){
+      this.chartOptions.xaxis.categories.push(this.month);
+      this.series[0].data.push(this.amount);
+      this.month =  "";
+      this.amount = "";
     }
   }
 }
@@ -66,6 +97,20 @@ a {
   color: #42b983;
 }
 
+.hello{
+  display: flex; 
+  flex-direction: row;
+}
+
+.spendChart{
+  display: flex; 
+  flex-direction: column;
+  height: 500px;
+  width: 500px;
+  margin-left: 100px;
+}
+
+
 .enter{
   width: 200px;
 }
@@ -82,7 +127,6 @@ a {
   width: 300px;
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
 }
 
 </style>
