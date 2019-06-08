@@ -7,9 +7,10 @@
         Price: <input type = 'text' placeholder = 'price' v-model = 'price'>
         <input type = 'submit' value = "Enter" v-on:click = "addItem">
       </div>  
-      <div class = 'transaction' v-for = 'transaction in transactions'>
+      <div class = 'transaction' v-for = 'transaction, index in transactions'>
         <div class = 'item'> {{transaction["item"]}} </div>
         <div class = 'price'> {{transaction["price"]}} </div>
+        <input type = 'submit' value = "Delete" v-on:click = "deleteItem(transaction['.key'])"> 
       </div>
     </div>
   </div>
@@ -40,6 +41,9 @@ export default {
       db.collection('purchases').add({item: this.item, price: this.price});
       this.item  = '';
       this.price = '';
+    },
+    deleteItem(id){
+      db.collection('purchases').doc(id).delete();
     }
   }
 }
