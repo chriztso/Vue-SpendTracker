@@ -1,28 +1,31 @@
 <template>
-  <div class="hello">
-    <div class = 'listOne'>
-      <div> 
-        Purchase:<input type = 'text' class = 'enter' placeholder = 'purchase' v-model = 'item'>
-        Price: <input type = 'text' placeholder = 'price' v-model = 'price'>
-        <input type = 'submit' value = "Enter" v-on:click = "addItem">
-      </div>  
-      <div class = 'transaction' v-for = 'transaction, index in transactions'>
-        <div class = 'item'> {{transaction["item"]}} </div>
-        <div class = 'price'> {{transaction["price"]}} </div>
-        <input type = 'submit' value = "Delete" v-on:click = "deleteItem(transaction['.key'])"> 
+  <div>
+    <div class="hello">
+      <div class = 'listOne'>
+        <div> 
+          Purchase:<input type = 'text' class = 'enter' placeholder = 'purchase' v-model = 'item'>
+          Price: <input type = 'text' placeholder = 'price' v-model = 'price'>
+          <input type = 'submit' value = "Enter" v-on:click = "addItem">
+        </div>  
+        <div class = 'transaction' v-for = 'transaction, index in transactions'>
+          <div class = 'item'> {{transaction["item"]}} </div>
+          <div class = 'price'> {{transaction["price"]}} </div>
+          <input type = 'submit' value = "Delete" v-on:click = "deleteItem(transaction['.key'])"> 
+        </div>
+      </div>
+      <div class = 'spendChart'>
+        <div>
+          <p>Spending</p>
+          Month: <input type = 'text' v-model= 'month'>
+          Amount: <input type = 'text' v-model= 'amount'> <br>
+          <input type = "submit" value = "Enter spend" v-on:click = "addMonthlySpend"> 
+        </div>
+        <div >
+          <apexchart width="500" type="bar" :options="chartOptions" :series="series"></apexchart>
+        </div>
       </div>
     </div>
-    <div class = 'spendChart'>
-      <div>
-        <p>Spending</p>
-        Month: <input type = 'text' v-model= 'month'>
-        Amount: <input type = 'text' v-model= 'amount'>
-        <input type = "submit" value = "Enter spend" v-on:click = "addMonthlySpend"> 
-      </div>
-      <div>
-        <apexchart width="500" type="bar" :options="chartOptions" :series="series"></apexchart>
-      </div>
-    </div>
+    <input type = 'submit' value = "Logout" v-on:click = 'logoutUser'>
   </div>
 </template>
 
@@ -53,7 +56,8 @@ export default {
       item: '', 
       price: '', 
       month: '', 
-      amount: ''
+      amount: '', 
+      graphType : []
     }
   }, 
   firestore(){
@@ -75,6 +79,16 @@ export default {
       this.series[0].data.push(this.amount);
       this.month =  "";
       this.amount = "";
+    }, 
+    logoutUser(){
+      firebase.auth().signOut()
+      .then(() => {
+        alert('Logged out!');
+        this.$router.push({name : 'Login'});
+      })
+      .catch((err) => {
+        alert('Error is ' + err);
+      })
     }
   }
 }
